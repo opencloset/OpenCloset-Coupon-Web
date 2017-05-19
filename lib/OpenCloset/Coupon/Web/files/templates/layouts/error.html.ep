@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="ko" class="ie8"> <![endif]-->
+<!--[if IE 9]> <html lang="ko" class="ie9"> <![endif]-->
+<!--[if !IE]><!--> <html lang="ko"> <!--<![endif]-->
+<!-- BEGIN HEAD -->
+  <head>
+    <title><%= title . ' - ' . $site->{name} %></title>
+
+    <!-- META BEGINS -->
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <link rel="icon" type="image/png" href="<%= url_for("/img/icon.png") %>" />
+    <!-- META ENDS -->
+
+    <!-- CSS BEGINS -->
+    %= asset "app.css"
+    %= asset "error.css"
+    % if ( asset->processed("$page_id.css") ) {
+      %= asset "$page_id.css";
+    % }
+    <!-- CSS ENDS -->
+
+    <!-- JAVASCRIPT BEGINS -->
+    <script>
+    console && console.log("%c Welcome! Looking for support tell our team at staff@silex.kr","font-size:1.5em;color:#4b8df8;");
+    var CONFIG = {
+    };
+    </script>
+    <!-- JAVASCRIPT ENDS -->
+  </head>
+
+  <body class="error error-background">
+
+    <!-- CONTAINER BEGINS -->
+    <div class="container">
+      <div class="row">
+        %= content
+      </div>
+    </div>
+    <!-- CONTAINER ENDS -->
+
+    <!-- JAVASCRIPT BEGINS -->
+    %= asset "app.js"
+    % if ( asset->processed("$page_id.js") ) {
+      %= asset "$page_id.js";
+    % }
+
+    <!-- remove alert box after 8 sec -->
+    <script type="text/javascript">
+      setTimeout( function() { $(".alert").remove() }, 8000 );
+    </script>
+    <!-- JAVASCRIPT ENDS -->
+
+  </body>
+</html>

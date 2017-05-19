@@ -1,0 +1,29 @@
+% use utf8;
+% my $_id = "code-500";
+% layout "error", page_id => $_id;
+% title $page->{$_id}{title};
+<!-- 500 EXCEPTIONS -->
+        <div class="col s12 m6 offset-m3 l6 offset-l3">
+          <div class="card">
+            <div class="card-image">
+              <div class="logo">
+                <img src="<%= url_for("/img/logo-without-text.png") %>">
+              </div>
+              <div class="error-title">
+                <span class="card-title">500 Exception</span>
+              </div>
+            </div>
+            <div class="card-content">
+              <p>
+                "
+                We apologize, an error occurred on our side while handling your request.
+                The details have been sent to our administrators and we will investigate shortly.
+                In the mean time, please retry your request as it may have been temporary.
+                "
+              </p>
+            </div>
+            <div class="card-action">
+              <button class="btn btn-primary" onclick="window.location.href='<%= url_for("/") %>'"> Save me </button>
+            </div>
+          </div>
+        </div>

@@ -1,0 +1,128 @@
+% use utf8;
+% my $_id = "signup";
+% layout "login", page_id => $_id;
+% title $page->{$_id}{title};
+
+<!-- -->
+      %= include "login/cookie"
+
+      <!-- SIGNUP BEGINS -->
+      <div class="row sign-up">
+        <div class="content push2 col2 sheet sheet-page">
+
+          <div class="row">
+            <div class="content col4 text-center">
+              <div class="logo-login-img"></div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="content col4 text-center">
+              <span class="sign-up-head">여러분의 계정을 만드세요!</span>
+            </div>
+          </div>
+
+          <form
+            id="local-signup"
+            action="/signup"
+            action="<%= url_for("/signup") %>"
+            method="post"
+            data-parsley-validate
+            style="margin-top:5px;">
+
+            %= csrf_field
+
+            <div class="row">
+              <div class="content col4">
+                <label for="name">이름</label>
+                <input
+                  type="text"
+                  required
+                  data-parsley-required
+                  data-parsley-required-message="이름을 입력하세요"
+                  placeholder=""
+                  name="name">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="content col4">
+                <label for="email">이메일 주소</label>
+                <input
+                  type="email"
+                  data-parsley-type="email"
+                  required
+                  data-parsley-required
+                  data-parsley-required-message="이메일 주소를 입력하세요"
+                  data-parsley-uniquemail
+                  placeholder=""
+                  name="email">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="content col4">
+                <div class="row">
+                  <div class="col1 content">
+                    <label for="email">비밀번호</label>
+                  </div>
+                  <div class="col3 content text-right">
+                    <label class="legend input-tip-text">최소 8 글자 이상</label>
+                  </div>
+                </div>
+                <input
+                  type="password"
+                  required
+                  data-parsley-required
+                  data-parsley-required-message="비밀번호를 입력하세요"
+                  data-parsley-minlength="8"
+                  data-parsley-min-message="비밀번호는 최소 8글자가 넘어야 합니다"
+                  placeholder=""
+                  name="password">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="content col4">
+                <button type="submit" class="btn btn-primary">계정 만들기</button>
+              </div>
+            </div>
+          </form>
+
+          % if (0) {
+          <div class="row" style="margin-top:10px;">
+            <label class="legend text-center input-tip-text">
+              또는 다음 방법으로 계정을 만드세요.
+            </label>
+          </div>
+
+          <div class="row" style="margin-top:10px;">
+            <div class="content col2">
+                <button id="sign-in-google-btn" class="btn gl-sign-in">
+                  <i class="fa fa-google" style="font-weight:700"></i> Google
+                </button>
+            </div>
+            <div class="content col2">
+                <button id="sign-in-github-btn" class="btn github-sign-in">
+                  <i class="fa fa-github" style="font-weight:700"></i> Github
+                </button>
+            </div>
+          </div>
+          % }
+
+          <div class="row">
+            <div class="content col4" style="padding-top:5px;">
+              <small class="legend">위의 버튼을 클릭하는 것은 <a target="_blank" style="text-decoration:underline;" href="/terms">서비스 약관</a>에 동의하는 것입니다.</small>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="content col2 push2">
+          <a class="btn" href="<%= url_for("/login") %>">이미 계정이 있나요?</a>
+        </div>
+      </div>
+
+      <!-- SIGN UP ENDS -->

@@ -1,0 +1,165 @@
+% my $user = current_user;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+  <link rel="icon" type="image/png" href="<%= url_for("/img/icon.png") %>" />
+  <title><%= title %> - <%= $site->{name} %></title>
+
+  <!-- CSS  -->
+  %= asset "app.css";
+</head>
+<body>
+  <nav role="navigation">
+    <div class="nav-wrapper container">
+      <a id="logo-container" href="<%= url_for("/") %>" class="brand-logo"> <img src="<%= url_for("/img/logo.png") %>"> </a>
+      % my @menus = (
+      %   {
+      %     id   => "menu1",
+      %     url  => "/menu1",
+      %     text => "Menu 1",
+      %   },
+      %   {
+      %     id   => "menu2",
+      %     url  => "/menu2",
+      %     text => "Menu 2",
+      %   },
+      % );
+      % my @login_menus = (
+      %   {
+      %     id   => "login",
+      %     url  => "/login",
+      %     text => "로그인",
+      %   },
+      %   {
+      %     id   => "signup",
+      %     url  => "/signup",
+      %     text => "가입",
+      %   },
+      % );
+      % my @logout_menus = (
+      %   {
+      %     id   => "logout",
+      %     url  => "/logout",
+      %     text => "로그아웃",
+      %   },
+      % );
+      <ul class="right hide-on-med-and-down">
+        <li><a href="javascript:void(0);" class="waves-effect waves-block waves-light show-search"><i class="material-icons">search</i></a></li>
+        <li class="search-out"><input type="text" class="search-out-text" placeholder="무엇을 찾으시나요?"></li>
+        % for my $menu (@menus) {
+          <li class="<%= $page_id eq $menu->{id} ? "active" : q{} %>"><a href="<%= url_for($menu->{url}) %>" class="waves-effect waves-block waves-light"><%= $menu->{text} %></a></li>
+        % }
+        % if ($user) {
+          % for my $menu (@logout_menus) {
+            <li class="<%= $page_id eq $menu->{id} ? "active" : q{} %>"><a href="<%= url_for($menu->{url}) %>" class="waves-effect waves-block waves-light"><%= $menu->{text} %></a></li>
+          % }
+        % }
+        % else {
+          % for my $menu (@login_menus) {
+            <li class="<%= $page_id eq $menu->{id} ? "active" : q{} %>"><a href="<%= url_for($menu->{url}) %>" class="waves-effect waves-block waves-light"><%= $menu->{text} %></a></li>
+          % }
+        % }
+      </ul>
+      <ul id="nav-mobile" class="side-nav">
+        % for my $menu (@menus) {
+          <li class="<%= $page_id eq $menu->{id} ? "active" : q{} %>"><a href="<%= url_for($menu->{url}) %>" class="waves-effect waves-block waves-light"><%= $menu->{text} %></a></li>
+        % }
+        % if ($user) {
+          % for my $menu (@login_menus) {
+            <li class="<%= $page_id eq $menu->{id} ? "active" : q{} %>"><a href="<%= url_for($menu->{url}) %>" class="waves-effect waves-block waves-light"><%= $menu->{text} %></a></li>
+          % }
+        % }
+        % else {
+          % for my $menu (@logout_menus) {
+            <li class="<%= $page_id eq $menu->{id} ? "active" : q{} %>"><a href="<%= url_for($menu->{url}) %>" class="waves-effect waves-block waves-light"><%= $menu->{text} %></a></li>
+          % }
+        % }
+      </ul>
+      <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+    </div>
+  </nav>
+
+  % my $page_info = $page->{$page_id};
+  % if ( @{ $page_info->{breadcrumb} } ) {
+    <nav class="top-nav">
+      <div class="container">
+        <div class="nav-wrapper">
+          <div class="col s12">
+  %   for my $pid ( @{ $page_info->{breadcrumb} } ) {
+  %     my $url         = $page->{$pid}{url} ? url_for( $page->{$pid}{url} ) : "#";
+  %     my $title_short = ( $page_title_short && $pid eq $page_id ) ? $page_title_short : $page->{$pid}{title_short};
+            <a href="<%= $url || "#" %>" class="breadcrumb"><%= $title_short %></a>
+  %   }
+          </div>
+        </div>
+      </div>
+    </nav>
+  % }
+
+  <div id="<%= $page_id %>">
+    <%= content %>
+  </div>
+
+  <footer class="page-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col l3 s12">
+          <h5>열린옷장</h5>
+          <p>
+            사단법인 열린옷장
+            | 이사장 한만일
+            | 개인정보관리책임자 김소령
+            | 사업자등록번호 498-82-00028
+            | 서울특별시 공유단체 제26호
+            | 통신판매업신고번호 2016-서울광진-0004
+            | 전자우편 info@theopencloset.net
+            | 전화 070-4325-7521
+          </p>
+        </div>
+        <div class="col l3 s12">
+          <h5>콘텐츠 관리 고지</h5>
+          <p>
+            온라인 상 또는 서면으로 보내주신 기증편지 또는 감사편지는
+            SNS 및 웹사이트에 공개될 수 있습니다.
+            공개를 원치 않는 경우 이메일 또는 전화를 통해 알려주세요.
+            이 경우 내용을 공개하지 않으며, 이미 공개된 경우라면 SNS 및 웹사이트에서 삭제합니다.
+          </p>
+        </div>
+        <div class="col l3 s12">
+          <h5>링크</h5>
+          <ul>
+            % for my $link (@$links) {
+              <li><a href="<%= $link->{url} %>"><%= $link->{name} %></a></li>
+            % }
+          </ul>
+        </div>
+        <div class="col l3 s12">
+          <h5>Connect</h5>
+          <ul>
+            <li><a href="https://twitter.com/openclosetnet"><i class="fa fa-2x fa-twitter-square"></i> 트위터</a></li>
+            <li><a href="https://www.facebook.com/TheOpenCloset/"><i class="fa fa-2x fa-facebook-square"></i> 페이스북</a></li>
+            <li><a href="https://www.instagram.com/opencloset_story/"><i class="fa fa-2x fa-instagram"></i> 인스타그램</a></li>
+            <li><a href="http://theopencloset.tistory.com"><i class="fa fa-2x fa-rss-square"></i> RSS 구독</a></li>
+            <li><a href="https://github.com/opencloset/"><i class="fa fa-2x fa-github-square"></i> GitHub</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+        &copy; <%= $copyright %>. All Rights Reserved.
+      </div>
+    </div>
+  </footer>
+
+  <!--  Scripts-->
+  %= asset "app.js";
+  %= asset "auth.js";
+  % if ( asset->processed("$page_id.js") ) {
+    %= asset "$page_id.js";
+  % }
+
+  </body>
+</html>

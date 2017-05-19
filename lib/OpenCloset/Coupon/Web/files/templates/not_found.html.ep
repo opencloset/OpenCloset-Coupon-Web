@@ -1,0 +1,29 @@
+% use utf8;
+% my $_id = "code-404";
+% layout "error", page_id => $_id;
+% title $page->{$_id}{title};
+<!-- 404 NOT FOUND -->
+        <div class="col s12 m6 offset-m3 l6 offset-l3">
+          <div class="card">
+            <div class="card-image">
+              <div class="logo">
+                <img src="<%= url_for("/img/logo-without-text.png") %>">
+              </div>
+              <div class="error-title">
+                <span class="card-title">404 Not Found</span>
+              </div>
+            </div>
+            <div class="card-content">
+              <p>
+                "
+                We couldn’t find the page you’re looking for.
+                Maybe someone in the team is to blame for this or maybe you’re looking for an existing URL.
+                In both cases you we have a button to save your navigation right here.
+                "
+              </p>
+            </div>
+            <div class="card-action">
+              <button class="btn btn-primary" onclick="window.location.href='<%= url_for("/") %>'"> Save me </button>
+            </div>
+          </div>
+        </div>

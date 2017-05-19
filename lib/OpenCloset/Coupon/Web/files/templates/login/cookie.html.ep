@@ -1,0 +1,15 @@
+<!-- -->
+      <!-- COOKIE NOTICE BEGINS -->
+      <div id="cookie-header" class="topbar" style="background-color:#3D3F4D;height: 25px;display:none;">
+        <span style="font-size: 12px;margin-left: 10px;">
+          <span style="font-size: 10px">
+            <span class="fa-stack">
+              <i class="fa fa-shield fa-stack-2x text-green"></i>
+              <i class="fa fa-check fa-stack-1x text-white"></i>
+            </span>
+          </span>
+          열린옷장 서비스를 제대로 이용하려면 쿠키가 필요합니다.
+          서비스를 이용하기 위해서, 열린옷장의 쿠키 사용에 동의하셔야 합니다.
+          <a href="<%= url_for("/privacy") %>" target="_blank" style="text-decoration:underline">더 알아보기</a> - <a id="cookie-agree" style="text-decoration:underline">알겠습니다</a></span>
+      </div>
+      <!-- COOKIE NOTICE ENDS -->
