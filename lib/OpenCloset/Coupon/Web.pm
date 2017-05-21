@@ -217,7 +217,7 @@ sub startup {
     $app->_renderer_paths;
     $app->_namespaces;
     $app->_public_routes;
-    $app->_private_routes;
+    #$app->_private_routes;
 }
 
 sub _home_path {
@@ -319,8 +319,13 @@ sub _plugins {
                     return;
                 }
 
-                unless ( $user_obj->check_password($pass) ) {
-                    $self->app->log->warn("$user\'s password is wrong");
+                my $password_check = 0;
+                my $authcode_check = 0;
+                ++$password_check if $user_obj->password && $user_obj->check_password($pass);
+                ++$authcode_check if $user_obj->authcode && $user_obj->authcode eq $pass;
+
+                unless ( $password_check || $authcode_check ) {
+                    $self->app->log->warn("$user\'s auth failed: password($password_check), authcode($authcode_check)");
                     return;
                 }
 
@@ -342,6 +347,13 @@ sub _helpers {
     # Helpers
     #
     $app->helper(
+        db => sub {
+            my $self = shift;
+
+            return $self->app->db;
+        }
+    );
+    $app->helper(
         rs => sub {
             my ( $self, $result_set_name ) = @_;
 
@@ -351,6 +363,39 @@ sub _helpers {
             return unless $db;
 
             return $db->resultset($result_set_name);
+        }
+    );
+    $app->helper(
+        error => sub {
+            my ( $self, $status, $error, $template ) = @_;
+
+            $self->app->log->error( $error->{in} );
+            $self->app->log->debug($template);
+
+            unless ($template) {
+                no warnings "experimental";
+                given ($status) {
+                    $template = "bad_request" when 400;
+                    $template = "not_found" when 404;
+                    $template = "exception" when 500;
+                    default { $template = "unknown" }
+                }
+            }
+
+            $self->respond_to(
+                json => {
+                    status => $status,
+                    json   => { error => $error->{out} || q{} }
+                },
+                html => {
+                    status     => $status,
+                    error      => $error->{out} || q{},
+                    return_url => $error->{return_url} || q{},
+                    template   => $template,
+                },
+            );
+
+            return;
         }
     );
 }
@@ -423,12 +468,14 @@ sub _public_routes {
     my $app = shift;
 
     my $r = $app->routes;
-    $r->get("/login")->to("login#login_get");
-    $r->post("/login")->to("login#login_post");
-    $r->get("/signup")->to("login#signup_get");
-    $r->post("/signup")->to("login#signup_post");
-    $r->get("/login/forgot")->to("login#forgot_get");
-    $r->post("/login/forgot")->to("login#forgot_post");
+    #$r->get("/login")->to("login#login_get");
+    #$r->post("/login")->to("login#login_post");
+    #$r->get("/signup")->to("login#signup_get");
+    #$r->post("/signup")->to("login#signup_post");
+    #$r->get("/login/forgot")->to("login#forgot_get");
+    #$r->post("/login/forgot")->to("login#forgot_post");
+
+    $r->get("/seoul/2017/2")->to("seoul#seoul_2017_2_get");
 }
 
 sub _private_routes {
