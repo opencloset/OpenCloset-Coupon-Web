@@ -1,0 +1,43 @@
+* {
+    box-sizing: border-box;
+}
+body {
+    background-color: #eee;
+    padding-bottom: 80px;
+    padding-top: 80px;
+    text-align: center;
+
+    color: #3d3f4d;
+    font-family: Roboto,Helvetica,"Lucida Grande",Arial,"Noto Sans KR","Nanum Gothic",sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+}
+body {
+    background-color: #272d4e;
+    background-color: #ffcb02;
+    background-color: #222222;
+    background-color: #ffcb02;
+    background-image: url("/img/error-background.png");
+}
+.coupon {
+    .logo {
+        padding: 40px;
+    }
+    .coupon-title {
+        .card-title {
+            bottom: auto;
+            color: black;
+            font-family: "Open Sans","Noto Sans KR","Nanum Gothic",sans-serif;
+            font-size: 40px;
+            font-style: italic;
+            font-weight: 800;
+            left: auto;
+            letter-spacing: -3px;
+            position: static;
+        }
+    }
+    .coupon-code {
+        font-size: 1.4em;
+        font-weight: bold;
+    }
+}

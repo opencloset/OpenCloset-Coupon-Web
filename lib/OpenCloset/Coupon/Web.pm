@@ -137,7 +137,7 @@ sub default_config {
                 breadcrumb  => [],
             },
             "code-400" => {
-                title       => "요청이 잘못되었습니다.",
+                title       => "요청이 잘못되었습니다",
                 title_short => "400 Bad Request",
                 url         => q{},
                 breadcrumb  => [
@@ -196,9 +196,16 @@ sub default_config {
                 url         => "/login/forgot",
                 breadcrumb  => [],
             },
+            "coupon" => {
+                title       => "쿠폰",
+                title_short => "쿠폰",
+                url         => q{},
+                breadcrumb  => [],
+            },
         },
         url => {
             visit => "http://localhost:8001/visit",
+            share => "http://localhost:8010",
         }
     };
 }

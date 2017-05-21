@@ -1,0 +1,28 @@
+% use utf8;
+% my $_id = "coupon";
+% layout "coupon", page_id => $_id;
+% title $page->{$_id}{title};
+        <div class="col s12 m6 offset-m3 l6 offset-l3">
+          <div class="card">
+            <div class="card-image">
+              <div class="logo">
+                <img src="<%= url_for("/img/logo-without-text.png") %>">
+              </div>
+              <div class="coupon-title">
+                <span class="card-title"> <%= $title %> </span>
+              </div>
+            </div>
+            <div class="card-content">
+              <p>
+                <span class="coupon-code"><%= $code %></span>
+              </p>
+              <p>
+                온라인 예약 페이지에서 예약을 진행하신 후 결제시 쿠폰 번호를 입력해주세요.
+                본인 이외의 사용자에게 쿠폰 번호가 노출되지 않도록 조심하세요.
+              </p>
+            </div>
+            <div class="card-action">
+              <button class="btn btn-primary" onclick="window.location.href='<%= $return_url %>'"> 온라인 예약 하기 </button>
+            </div>
+          </div>
+        </div>

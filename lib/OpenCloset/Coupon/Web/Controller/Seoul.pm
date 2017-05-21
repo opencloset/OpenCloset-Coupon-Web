@@ -61,6 +61,7 @@ sub seoul_2017_2_get {
     my $encrypted_rent_num = $self->param("rent_num") || q{};
 
     my $visit_url  = $self->config->{url}{visit};
+    my $share_url  = $self->config->{url}{share};
     my $return_url = "https://dressfree.net";
     my $seoul_url  = "https://dressfree.net/theopencloset/api_rentInfo.php";
 
@@ -312,7 +313,12 @@ sub seoul_2017_2_get {
         );
     }
     elsif ( $rent_type eq "online" ) {
-        # ...
+        $self->stash(
+            title      => "취업날개 쿠폰 번호",
+            code       => $code,
+            return_url => $share_url,
+        );
+        $self->render( template => "seoul" );
     }
 }
 
