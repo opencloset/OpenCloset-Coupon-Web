@@ -80,7 +80,7 @@ sub default_config {
 
     return +{
         hypnotoad => {
-            listen   => ["http://*:8080"],
+            listen   => ["http://*:8014"],
             workers  => 4,
             pid_file => "hypnotoad.pid",
         },
