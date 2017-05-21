@@ -72,12 +72,14 @@ sub seoul_2017_2_get {
         my $out = "암호화된 취업날개 예약 번호 형식이 유효하지 않습니다. 취업날개 서비스에 문의해주세요.";
 		return $self->error( 400, { in => $in, out => $out, return_url => $return_url } );
     }
+    $self->app->log->debug("encrypted rent_num: $encrypted_rent_num");
     my $rent_num = $self->_decrypt_inetpia($encrypted_rent_num);
     unless ($rent_num && $rent_num =~ m/^\d{12}-\d{3}$/ ) {
         my $in  = "invalid rent_num: $rent_num";
         my $out = "복호화된 취업날개 예약 번호 형식이 유효하지 않습니다. 취업날개 서비스에 문의해주세요.";
 		return $self->error( 400, { in => $in, out => $out, return_url => $return_url } );
     }
+    $self->app->log->debug("decrypted rent_num: $rent_num");
 
     my $res;
     {
