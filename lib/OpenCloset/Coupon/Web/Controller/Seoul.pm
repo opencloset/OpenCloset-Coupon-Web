@@ -69,8 +69,8 @@ sub seoul_2017_2_get {
     my $redirect = $self->param("redirect") || q{};
     my $encrypted_rent_num = $self->param("rent_num") || q{};
 
+    my $visit_url  = $self->config->{url}{visit};
     my $return_url = "https://dressfree.net";
-    my $visit_url  = "http://visit.theopencloset.net.local:10301/visit";
     my $seoul_url  = "https://dressfree.net/theopencloset/api_rentInfo.php";
 
     #

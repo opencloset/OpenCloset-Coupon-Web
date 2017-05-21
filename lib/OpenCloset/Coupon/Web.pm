@@ -197,6 +197,9 @@ sub default_config {
                 breadcrumb  => [],
             },
         },
+        url => {
+            visit => "http://localhost:8001/visit",
+        }
     };
 }
 
