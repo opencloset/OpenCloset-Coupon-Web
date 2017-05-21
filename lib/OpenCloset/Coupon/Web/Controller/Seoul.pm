@@ -54,15 +54,6 @@ sub _convert_inetpia_address {
     return ( $address1, $address2, $address3, $address4 );
 }
 
-=pod
-
-http://coupon.theopencloset.net.local:10307/seoul/2017/2?rent_num=37854752672489971092
-
-DELETE FROM `user` WHERE email = 'sun@inetpia.net';
-DELETE FROM `coupon` WHERE `desc` LIKE 'seoul-2017-2|%' ;
-
-=cut
-
 sub seoul_2017_2_get {
     my $self = shift;
 
