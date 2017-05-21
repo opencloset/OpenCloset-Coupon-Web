@@ -88,11 +88,28 @@ sub seoul_2017_2_get {
 		return $self->error( 400, { in => $in, out => $out, return_url => $return_url } );
     }
 
-    my $res = HTTP::Tiny->new( timeout => 1 )->get("$seoul_url?rent_num=$rent_num");
-    unless ( $res->{success} ) {
-        my $in  = "api request failed: $res->{reason} $seoul_url?rent_num=$rent_num";
-        my $out = "취업날개로 보낸 예약 번호 확인 요청이 실패했습니다. 취업날개 서비스에 문의해주세요.";
-		return $self->error( 400, { in => $in, out => $out, return_url => $return_url } );
+    my $res;
+    {
+        my $apicall_check = 0;
+        my $max_retry     = 3;
+        for my $retry ( 1 .. $max_retry ) {
+            $res = HTTP::Tiny->new( timeout => 1 )->get("$seoul_url?rent_num=$rent_num");
+            if ( $res->{success} ) {
+                ++$apicall_check;
+                last;
+            }
+            else {
+                $self->app->log->warn(
+                    "[$retry/$max_retry] api request failed: $res->{reason} $seoul_url?rent_num=$rent_num"
+                );
+            }
+        }
+        unless ($apicall_check) {
+            my $in = "api request failed: $res->{reason} $seoul_url?rent_num=$rent_num";
+            my $out =
+                "취업날개로 보낸 예약 번호 확인 요청이 실패했습니다. 취업날개 서비스에 문의해주세요.";
+            return $self->error( 400, { in => $in, out => $out, return_url => $return_url } );
+        }
     }
 
     my $data = Mojo::JSON::from_json( Encode::decode_utf8( $res->{content} ) );
