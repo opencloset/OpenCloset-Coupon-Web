@@ -373,7 +373,7 @@ sub _helpers {
             my ( $self, $status, $error, $template ) = @_;
 
             $self->app->log->error( $error->{in} );
-            $self->app->log->debug($template);
+            $self->app->log->debug($template) if $template;
 
             unless ($template) {
                 no warnings "experimental";
