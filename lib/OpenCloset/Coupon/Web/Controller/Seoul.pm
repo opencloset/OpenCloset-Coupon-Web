@@ -262,7 +262,7 @@ sub seoul_2017_2_get {
                 return $self->error( 400, { in => $in, out => $out, return_url => "https://theopencloset.net" } );
             }
 
-            $self->app->log->info("create a user: id(" . $user->id . "), name($name), email($email), phone($phone), gender($gender), birth($birth)");
+            $self->app->log->info("create a user: id(" . $ui->user->id . "), name($name), email($email), phone($phone), gender($gender), birth($birth)");
 
             $user = $_user;
         }
