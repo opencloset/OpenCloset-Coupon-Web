@@ -34,20 +34,20 @@ sub _convert_inetpia_address {
     ( my $q = $m_address ) =~ s/ \(.*$//;
 
     my $http   = HTTP::Tiny->new( timeout => 1 );
-	my $url    = "https://postcodify.theopencloset.net/api/postcode/search";
-	my $params = $http->www_form_urlencode( +{ q => $q } );
-	my $res    = $http->get("$url?$params");
+    my $url    = "https://postcodify.theopencloset.net/api/postcode/search";
+    my $params = $http->www_form_urlencode( +{ q => $q } );
+    my $res    = $http->get("$url?$params");
     return () unless $res->{success};
 
     my $data = Mojo::JSON::from_json( Encode::decode_utf8( $res->{content} ) );
-	my $address = $data->{results}[0];
+    my $address = $data->{results}[0];
     return () unless $address;
 
-	my $address1 = $address->{building_id};
-	my $address2 = join( q{ }, $address->{ko_common}, $address->{ko_doro} );
-	my $address3 = join( q{ }, $address->{ko_common}, $address->{ko_jibeon} );
-	my $address4 = $address->{other_addresses};
-	my $postcode = $address->{postcode5};
+    my $address1 = $address->{building_id};
+    my $address2 = join( q{ }, $address->{ko_common}, $address->{ko_doro} );
+    my $address3 = join( q{ }, $address->{ko_common}, $address->{ko_jibeon} );
+    my $address4 = $address->{other_addresses};
+    my $postcode = $address->{postcode5};
 
     return () unless $m_post eq $postcode;
 
@@ -71,14 +71,14 @@ sub seoul_2017_2_get {
     unless ( $encrypted_rent_num && $encrypted_rent_num =~ m/^\d{20}$/ ) {
         my $in  = "invalid encrypted rent_num: $encrypted_rent_num";
         my $out = "암호화된 취업날개 예약 번호 형식이 유효하지 않습니다. 취업날개 서비스에 문의해주세요.";
-		return $self->error( 400, { in => $in, out => $out, return_url => $return_url } );
+        return $self->error( 400, { in => $in, out => $out, return_url => $return_url } );
     }
     $self->app->log->debug("encrypted rent_num: $encrypted_rent_num");
     my $rent_num = $self->_decrypt_inetpia($encrypted_rent_num);
     unless ($rent_num && $rent_num =~ m/^\d{12}-\d{3}$/ ) {
         my $in  = "invalid rent_num: $rent_num";
         my $out = "복호화된 취업날개 예약 번호 형식이 유효하지 않습니다. 취업날개 서비스에 문의해주세요.";
-		return $self->error( 400, { in => $in, out => $out, return_url => $return_url } );
+        return $self->error( 400, { in => $in, out => $out, return_url => $return_url } );
     }
     $self->app->log->debug("decrypted rent_num: $rent_num");
 
@@ -156,7 +156,7 @@ sub seoul_2017_2_get {
         return $self->error( 400, { in => $in, out => $out, return_url => $return_url } );
     }
 
-	#
+    #
     # user find or create
     #
     my $user = $self->rs("User")->find(
@@ -282,7 +282,7 @@ sub seoul_2017_2_get {
         return $self->error( 400, { in => $in, out => $out, return_url => "https://theopencloset.net" } );
     }
 
-	#
+    #
     # find coupon then revoke reservation
     #
     my $coupon_rs = $self->rs("Coupon")->search(
@@ -298,10 +298,10 @@ sub seoul_2017_2_get {
         return $self->error( 400, { in => $in, out => $out, return_url => $return_url } );
     }
 
-	#
+    #
     # find or create coupon then save it into session
     #
-	my $code = Algorithm::CouponCode::cc_generate( parts => 3 );
+    my $code = Algorithm::CouponCode::cc_generate( parts => 3 );
     my $coupon = $self->rs("Coupon")->create(
         {
             code   => $code,
