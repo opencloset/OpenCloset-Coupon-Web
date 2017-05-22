@@ -185,13 +185,30 @@ sub seoul_2017_2_get {
     }
     else {
         my $ui = $self->rs("UserInfo")->find( { phone => $phone } );
-        if ($ui) {
+        unless ( $ui && $user->name eq $name && !$user->email && !$user->gender && !$user->birth ) {
             my $in  = "duplicated phone number: $phone";
             my $out = "이미 존재하는 휴대폰 번호입니다. 취업날개 또는 열린옷장에 문의해주세요.";
             return $self->error( 400, { in => $in, out => $out, return_url => $return_url } );
         }
+        if ($ui) {
+            my $guard = $self->db->txn_scope_guard;
 
-		{
+            $ui->user->update( { email => $email } );
+            $ui->update(
+                {
+                    phone  => $phone,
+                    gender => $gender,
+                    birth  => $birth,
+                },
+            );
+
+            $guard->commit;
+
+            $self->app->log->info("update a user: id(" . $user->id . "), name($name), email($email), phone($phone), gender($gender), birth($birth)");
+
+            $user = $ui->user;
+        }
+        else {
             my $guard = $self->db->txn_scope_guard;
 
             my $_user = $self->rs("User")->create(
@@ -220,16 +237,16 @@ sub seoul_2017_2_get {
 
             $guard->commit;
 
+            unless ($_user) {
+                my $in  = "failed to create a user and user info: $email";
+                my $out = "사용자 생성에 실패했습니다. 열린옷장에 문의해주세요.";
+                return $self->error( 400, { in => $in, out => $out, return_url => "https://theopencloset.net" } );
+            }
+
+            $self->app->log->info("create a user: id(" . $user->id . "), name($name), email($email), phone($phone), gender($gender), birth($birth)");
+
             $user = $_user;
         }
-
-        unless ($user) {
-            my $in  = "failed to create a user and user info: $email";
-            my $out = "사용자 생성에 실패했습니다. 열린옷장에 문의해주세요.";
-            return $self->error( 400, { in => $in, out => $out, return_url => "https://theopencloset.net" } );
-        }
-
-        $self->app->log->info("create a user: id(" . $user->id . "), name($name), email($email), phone($phone)");
     }
 
     #
