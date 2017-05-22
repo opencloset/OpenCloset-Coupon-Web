@@ -191,12 +191,26 @@ sub seoul_2017_2_get {
     }
     else {
         my $ui = $self->rs("UserInfo")->find( { phone => $phone } );
-        unless ( $ui && $ui->user->name eq $name && !$ui->user->email && !$ui->gender && !$ui->birth ) {
-            my $in  = "duplicated phone number: $phone";
-            my $out = "이미 존재하는 휴대폰 번호입니다. 취업날개 또는 열린옷장에 문의해주세요.";
-            return $self->error( 400, { in => $in, out => $out, return_url => $return_url } );
-        }
         if ($ui) {
+            if ( $ui->user->name ne $name ) {
+                my $in  = sprintf( "unmatched user name and phone: %s %s", $ui->user->name, $phone );
+                my $out = "사용자 이름과 휴대폰 번호가 일치하지 않습니다. 취업날개 또는 열린옷장에 문의해주세요.";
+                return $self->error( 400, { in => $in, out => $out, return_url => $return_url } );
+            }
+
+            if ( $ui->user->email || $ui->gender || $ui->birth ) {
+                my $in = sprintf(
+                    "unmatched user information: name(%s) phone(%s) email(%s,%s) birth(%d,%d) gender(%s,%s)",
+                    $name,
+                    $phone,
+                    $ui->user->email, $email,
+                    $ui->birth,       $birth,
+                    $ui->gender,      $gender,
+                );
+                my $out = "사용자 정보가 일치하지 않습니다. 취업날개 또는 열린옷장에 문의해주세요.";
+                return $self->error( 400, { in => $in, out => $out, return_url => $return_url } );
+            }
+
             my $guard = $self->db->txn_scope_guard;
 
             $ui->user->update( { email => $email } );
@@ -211,7 +225,6 @@ sub seoul_2017_2_get {
             $guard->commit;
 
             $self->app->log->info("update a user: id(" . $ui->user->id . "), name($name), email($email), phone($phone), gender($gender), birth($birth)");
-
             $user = $ui->user;
         }
         else {
