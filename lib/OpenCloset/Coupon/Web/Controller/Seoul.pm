@@ -185,7 +185,7 @@ sub seoul_2017_2_get {
     }
     else {
         my $ui = $self->rs("UserInfo")->find( { phone => $phone } );
-        unless ( $ui && $user->name eq $name && !$user->email && !$user->gender && !$user->birth ) {
+        unless ( $ui && $ui->user->name eq $name && !$ui->user->email && !$ui->user->gender && !$ui->user->birth ) {
             my $in  = "duplicated phone number: $phone";
             my $out = "이미 존재하는 휴대폰 번호입니다. 취업날개 또는 열린옷장에 문의해주세요.";
             return $self->error( 400, { in => $in, out => $out, return_url => $return_url } );
