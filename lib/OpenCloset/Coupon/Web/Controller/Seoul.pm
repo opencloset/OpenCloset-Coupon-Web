@@ -204,7 +204,7 @@ sub seoul_2017_2_get {
 
             $guard->commit;
 
-            $self->app->log->info("update a user: id(" . $user->id . "), name($name), email($email), phone($phone), gender($gender), birth($birth)");
+            $self->app->log->info("update a user: id(" . $ui->user->id . "), name($name), email($email), phone($phone), gender($gender), birth($birth)");
 
             $user = $ui->user;
         }
