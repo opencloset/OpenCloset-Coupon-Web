@@ -107,7 +107,13 @@ sub seoul_2017_2_get {
     }
 
     my $data = Mojo::JSON::from_json( Encode::decode_utf8( $res->{content} ) );
-    $data = $data->[0] if $data && $data->[0];
+    unless ( $data && $data->[0] ) {
+        my $in = "invalid api response: " . Encode::decode_utf8( $res->{content} );
+        my $out =
+            "취업날개에서 확인한 예약 번호 확인 응답이 유효하지 않습니다. 취업날개 서비스에 문의해주세요.";
+        return $self->error( 400, { in => $in, out => $out, return_url => $return_url } );
+    }
+    $data = $data->[0];
 
     # $data->{MberSn}
     # $data->{rent_num}
