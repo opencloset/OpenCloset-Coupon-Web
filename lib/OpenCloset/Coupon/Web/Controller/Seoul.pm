@@ -86,20 +86,23 @@ sub seoul_2017_2_get {
     {
         my $apicall_check = 0;
         my $max_retry     = 3;
+
+        my $req_url = "$seoul_url?rent_num=$rent_num";
+        $self->app->log->info("api request: $req_url");
         for my $retry ( 1 .. $max_retry ) {
-            $res = HTTP::Tiny->new( timeout => 1 )->get("$seoul_url?rent_num=$rent_num");
+            $res = HTTP::Tiny->new( timeout => 1 )->get($req_url);
             if ( $res->{success} ) {
                 ++$apicall_check;
                 last;
             }
             else {
                 $self->app->log->warn(
-                    "[$retry/$max_retry] api request failed: $res->{reason} $seoul_url?rent_num=$rent_num"
+                    "[$retry/$max_retry] api request failed: $res->{reason} $req_url"
                 );
             }
         }
         unless ($apicall_check) {
-            my $in = "api request failed: $res->{reason} $seoul_url?rent_num=$rent_num";
+            my $in = "api request failed: $res->{reason} $req_url";
             my $out =
                 "취업날개로 보낸 예약 번호 확인 요청이 실패했습니다. 취업날개 서비스에 문의해주세요.";
             return $self->error( 400, { in => $in, out => $out, return_url => $return_url } );
