@@ -207,7 +207,9 @@ sub seoul_2017_2_get {
                     $ui->birth,       $birth,
                     $ui->gender,      $gender,
                 );
-                my $out = "사용자 정보가 일치하지 않습니다. 취업날개 또는 열린옷장에 문의해주세요.";
+                my $out =
+                    "취업날개에서 입력하신 사용자 정보와 열린옷장에서 입력하신 사용자 정보가 일치하지 않습니다."
+                    . " 취업날개 또는 열린옷장에 문의해주세요.";
                 return $self->error( 400, { in => $in, out => $out, return_url => $return_url } );
             }
 
