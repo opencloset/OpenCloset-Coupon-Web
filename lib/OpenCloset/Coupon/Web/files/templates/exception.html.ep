@@ -19,12 +19,15 @@
                 % if ($error) {
                   <%= $error %>
                   % if ( $contact eq "seoul" ) {
+                    현재 화면을 갈무리(캡쳐)하신 후
                     취업날개 서비스에 문의해주세요.
                   % }
                   % elsif ( $contact eq "opencloset" ) {
+                    현재 화면을 갈무리(캡쳐)하신 후
                     열린옷장에 문의해주세요.
                   % }
                   % elsif ( $contact eq "both" ) {
+                    현재 화면을 갈무리(캡쳐)하신 후
                     취업날개 또는 열린옷장에 문의해주세요.
                   % }
                   -
