@@ -18,6 +18,18 @@
                 "
                 % if ($error) {
                   <%= $error %>
+                  % if ( $contact eq "seoul" ) {
+                    취업날개 서비스에 문의해주세요.
+                  % }
+                  % elsif ( $contact eq "opencloset" ) {
+                    열린옷장에 문의해주세요.
+                  % }
+                  % elsif ( $contact eq "both" ) {
+                    취업날개 또는 열린옷장에 문의해주세요.
+                  % }
+                  -
+                  <%= $dt->iso8601 %>
+                  <%= $encrypted_rent_num %>
                 % }
                 % else {
                   We couldn't understand the request.
@@ -25,6 +37,9 @@
                   The client should not repeat the request without modifications.
                 % }
                 "
+              </p>
+              <p>
+                %= include "contacts", contact => $contact;
               </p>
             </div>
             <div class="card-action">

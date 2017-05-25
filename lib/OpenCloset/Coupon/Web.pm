@@ -379,6 +379,8 @@ sub _helpers {
         error => sub {
             my ( $self, $status, $error, $template ) = @_;
 
+            my $now = DateTime->now( time_zone => $app->config->{time_zone} );
+
             $self->app->log->error( $error->{in} );
             $self->app->log->debug($template) if $template;
 
@@ -399,9 +401,11 @@ sub _helpers {
                 },
                 html => {
                     status     => $status,
+                    template   => $template,
+                    dt         => $now,
                     error      => $error->{out} || q{},
                     return_url => $error->{return_url} || q{},
-                    template   => $template,
+                    contact    => $error->{contact} || q{},
                 },
             );
 

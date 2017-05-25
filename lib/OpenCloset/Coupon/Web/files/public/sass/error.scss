@@ -36,4 +36,12 @@ body {
             position: static;
         }
     }
+    .card-content {
+        p {
+            margin-bottom: 10px;
+            .contact-title {
+                font-weight: 800;
+            }
+        }
+    }
 }

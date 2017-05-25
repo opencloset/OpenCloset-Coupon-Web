@@ -54,6 +54,116 @@ sub _convert_inetpia_address {
     return ( $address1, $address2, $address3, $address4 );
 }
 
+sub _error {
+    my ( $self, $code, $data ) = @_;
+
+    my $return_url = "https://dressfree.net";
+
+    my %common_seoul = (
+        status  => 400,
+        contact => "seoul",
+        url     => $return_url,
+    );
+    my %common_opencloset = (
+        status  => 500,
+        contact => "opencloset",
+        url     => "https://theopencloset.net",
+    );
+    my %common_both = (
+        status  => 400,
+        contact => "both",
+        url     => $return_url,
+    );
+
+    my %error = (
+        1001 => {
+            %common_seoul,
+            in  => "invalid encrypted rent_num: $data",
+            out => "암호화된 취업날개 예약 번호 형식이 유효하지 않습니다.",
+        },
+        1002 => {
+            %common_seoul,
+            in  => "invalid rent_num: $data",
+            out => "복호화된 취업날개 예약 번호 형식이 유효하지 않습니다.",
+        },
+        2001 => {
+            %common_seoul,
+            in  => "api request failed: $data",
+            out => "취업날개로 보낸 예약 번호 확인 요청이 실패했습니다.",
+        },
+        2002 => {
+            %common_seoul,
+            in  => "invalid api response: $data",
+            out => "취업날개에서 확인한 예약 번호 확인 응답이 유효하지 않습니다.",
+        },
+        3001 => {
+            %common_seoul,
+            in  => "unmatched rent_num: $data",
+            out => "요청한 예약 번호와 획득한 예약 번호가 일치하지 않습니다.",
+        },
+        3002 => {
+            %common_seoul,
+            in  => "invalid rent_type",
+            out => "유효하지 않은 예약 유형입니다.",
+        },
+        4001 => {
+            %common_both,
+            in  => "invalid phone: $data,",
+            out => "취업날개와 열린옷장에서 입력한 전화번호가 일치하지 않습니다.",
+        },
+        4002 => {
+            %common_both,
+            in  => "invalid gender: $data,",
+            out => "취업날개와 열린옷장에서 입력한 성별이 일치하지 않습니다.",
+        },
+        4003 => {
+            %common_both,
+            in  => "invalid birth: $data",
+            out => "취업날개와 열린옷장에서 입력한 태어난 연도가 일치하지 않습니다.",
+        },
+        5001 => {
+            %common_both,
+            in  => "unmatched user name and phone: $data",
+            out => "사용자 이름과 휴대폰 번호가 일치하지 않습니다.",
+        },
+        5002 => {
+            %common_both,
+            in  => "unmatched user information: $data",
+            out => "취업날개와 열린옷장에서 입력한 사용자 정보가 일치하지 않습니다."
+        },
+        5003 => {
+            %common_opencloset,
+            in  => "failed to create a user and user info: $data",
+            out => "사용자 생성에 실패했습니다.",
+        },
+        6001 => {
+            %common_opencloset,
+            in  => "invalid authcode: $data",
+            out => "예약 번호 로그인에 실패했습니다.",
+        },
+        6002 => {
+            %common_seoul,
+            in  => "coupon via rent_num is already existed: $data",
+            out => "취업날개 예약 번호를 두 번 이상 사용하셨습니다. 취업날개로 요청한 예약 번호는 이미 존재합니다.",
+        },
+        6003 => {
+            %common_opencloset,
+            in  => "failed to create coupon: $data",
+            out => "쿠폰 생성에 실패했습니다.",
+        },
+    );
+
+    return $self->error(
+        $error{$code}{status},
+        {
+            in         => "error($code): $error{$code}{in}",
+            out        => "오류($code): $error{$code}{out}",
+            contact    => $error{$code}{contact},
+            return_url => $error{$code}{url},
+        }
+    );
+}
+
 sub seoul_2017_2_get {
     my $self = shift;
 
@@ -62,23 +172,20 @@ sub seoul_2017_2_get {
 
     my $visit_url  = $self->config->{url}{visit};
     my $share_url  = $self->config->{url}{share};
-    my $return_url = "https://dressfree.net";
     my $seoul_url  = "https://dressfree.net/theopencloset/api_rentInfo.php";
+
+    $self->stash( encrypted_rent_num => $encrypted_rent_num );
 
     #
     # validate rent_num
     #
     unless ( $encrypted_rent_num && $encrypted_rent_num =~ m/^\d{20}$/ ) {
-        my $in  = "invalid encrypted rent_num: $encrypted_rent_num";
-        my $out = "암호화된 취업날개 예약 번호 형식이 유효하지 않습니다. 취업날개 서비스에 문의해주세요.";
-        return $self->error( 400, { in => $in, out => $out, return_url => $return_url } );
+        return $self->_error( 1001, $encrypted_rent_num );
     }
     $self->app->log->debug("encrypted rent_num: $encrypted_rent_num");
     my $rent_num = $self->_decrypt_inetpia($encrypted_rent_num);
-    unless ($rent_num && $rent_num =~ m/^\d{12}-\d{3}$/ ) {
-        my $in  = "invalid rent_num: $rent_num";
-        my $out = "복호화된 취업날개 예약 번호 형식이 유효하지 않습니다. 취업날개 서비스에 문의해주세요.";
-        return $self->error( 400, { in => $in, out => $out, return_url => $return_url } );
+    unless ( $rent_num && $rent_num =~ m/^\d{12}-\d{3}$/ ) {
+        return $self->_error( 1002, $rent_num );
     }
     $self->app->log->debug("decrypted rent_num: $rent_num");
 
@@ -102,19 +209,13 @@ sub seoul_2017_2_get {
             }
         }
         unless ($apicall_check) {
-            my $in = "api request failed: $res->{reason} $req_url";
-            my $out =
-                "취업날개로 보낸 예약 번호 확인 요청이 실패했습니다. 취업날개 서비스에 문의해주세요.";
-            return $self->error( 400, { in => $in, out => $out, return_url => $return_url } );
+            return $self->_error( 2001, "$res->{reason} $req_url" );
         }
     }
 
     my $data = Mojo::JSON::from_json( Encode::decode_utf8( $res->{content} ) );
     unless ( $data && $data->[0] ) {
-        my $in = "invalid api response: " . Encode::decode_utf8( $res->{content} );
-        my $out =
-            "취업날개에서 확인한 예약 번호 확인 응답이 유효하지 않습니다. 취업날개 서비스에 문의해주세요.";
-        return $self->error( 400, { in => $in, out => $out, return_url => $return_url } );
+        return $self->_error( 2002, Encode::decode_utf8( $res->{content} ) );
     }
     $data = $data->[0];
 
@@ -152,17 +253,11 @@ sub seoul_2017_2_get {
     my $m_post     = $data->{m_post};
 
     unless ( $rent_num eq $authcode ) {
-        my $in = "unmatched rent_num: $authcode != $rent_num";
-        my $out =
-            "요청한 예약 번호와 획득한 예약 번호가 일치하지 않습니다. 취업날개 서비스에 문의해주세요.";
-        return $self->error( 400, { in => $in, out => $out, return_url => $return_url } );
+        return $self->_error( 3001, "$authcode != $rent_num" );
     }
 
     unless ( $rent_type eq "offline" || $rent_type eq "online" ) {
-        my $in = "invalid rent_type";
-        my $out =
-            "유효하지 않은 예약 유형입니다. 취업날개 서비스에 문의해주세요.";
-        return $self->error( 400, { in => $in, out => $out, return_url => $return_url } );
+        return $self->_error(3002);
     }
 
     #
@@ -176,33 +271,19 @@ sub seoul_2017_2_get {
     );
     if ($user) {
         my $ui = $user->user_info;
-        unless ( $ui->phone eq $phone ) {
-            my $in  = "invalid phone: $email, $phone";
-            my $out = "열린옷장에서 입력한 전화번호와 취업날개에서 입력한 전화번호가 일치하지 않습니다. 취업날개 또는 열린옷장에 문의해주세요.";
-            return $self->error( 400, { in => $in, out => $out, return_url => $return_url } );
-        }
-        unless ( $ui->gender eq $gender ) {
-            my $in  = "invalid gender: $email, $gender";
-            my $out = "열린옷장에서 입력한 성별과 취업날개에서 입력한 성별이 일치하지 않습니다. 취업날개 또는 열린옷장에 문의해주세요.";
-            return $self->error( 400, { in => $in, out => $out, return_url => $return_url } );
-        }
-        unless ( $ui->birth eq $birth ) {
-            my $in  = "invalid birth: $email, $birth";
-            my $out = "열린옷장에서 입력한 태어난 연도와 취업날개에서 입력한 태어난 연도가 일치하지 않습니다. 취업날개 또는 열린옷장에 문의해주세요.";
-            return $self->error( 400, { in => $in, out => $out, return_url => $return_url } );
-        }
+        return $self->_error( 4001, "$email, $phone" )  unless $ui->phone eq $phone;
+        return $self->_error( 4002, "$email, $gender" ) unless $ui->gender eq $gender;
+        return $self->_error( 4003, "$email, $birth" )  unless $ui->birth eq $birth;
     }
     else {
         my $ui = $self->rs("UserInfo")->find( { phone => $phone } );
         if ($ui) {
             if ( $ui->user->name ne $name ) {
-                my $in  = sprintf( "unmatched user name and phone: %s %s", $ui->user->name, $phone );
-                my $out = "사용자 이름과 휴대폰 번호가 일치하지 않습니다. 취업날개 또는 열린옷장에 문의해주세요.";
-                return $self->error( 400, { in => $in, out => $out, return_url => $return_url } );
+                return $self->_error( 5001, $email . " $phone" );
             }
 
             if ( $ui->user->email || $ui->gender || $ui->birth ) {
-                my $in = sprintf(
+                my $error_str = sprintf(
                     "unmatched user information: name(%s) phone(%s) email(%s,%s) birth(%d,%d) gender(%s,%s)",
                     $name,
                     $phone,
@@ -210,10 +291,7 @@ sub seoul_2017_2_get {
                     $ui->birth,       $birth,
                     $ui->gender,      $gender,
                 );
-                my $out =
-                    "취업날개에서 입력하신 사용자 정보와 열린옷장에서 입력하신 사용자 정보가 일치하지 않습니다."
-                    . " 취업날개 또는 열린옷장에 문의해주세요.";
-                return $self->error( 400, { in => $in, out => $out, return_url => $return_url } );
+                return $self->_error( 5002, $error_str );
             }
 
             my $guard = $self->db->txn_scope_guard;
@@ -229,7 +307,17 @@ sub seoul_2017_2_get {
 
             $guard->commit;
 
-            $self->app->log->info("update a user: id(" . $ui->user->id . "), name($name), email($email), phone($phone), gender($gender), birth($birth)");
+            $self->app->log->info(
+                sprintf(
+                    "update a user: id(%s), name(%s), email(%s), phone(%s), gender(%s), birth(%s)",
+                    $ui->user->id,
+                    $name,
+                    $email,
+                    $phone,
+                    $gender,
+                    $birth,
+                )
+            );
             $user = $ui->user;
         }
         else {
@@ -261,13 +349,19 @@ sub seoul_2017_2_get {
 
             $guard->commit;
 
-            unless ($_user) {
-                my $in  = "failed to create a user and user info: $email";
-                my $out = "사용자 생성에 실패했습니다. 열린옷장에 문의해주세요.";
-                return $self->error( 400, { in => $in, out => $out, return_url => "https://theopencloset.net" } );
-            }
+            return $self->_error( 5003, "$name, $email" ) unless $_user;
 
-            $self->app->log->info("create a user: id(" . $_user->id . "), name($name), email($email), phone($phone), gender($gender), birth($birth)");
+            $self->app->log->info(
+                sprintf(
+                    "create a user: id(%s), name(%s), email(%s), phone(%s), gender(%s), birth(%s)",
+                    $_user->id,
+                    $name,
+                    $email,
+                    $phone,
+                    $gender,
+                    $birth,
+                )
+            );
 
             $user = $_user;
         }
@@ -301,9 +395,7 @@ sub seoul_2017_2_get {
         },
     );
     unless ( $self->authenticate( $email, $authcode ) ) {
-        my $in  = "invalid authcode: $email, $authcode";
-        my $out = "예약 번호 로그인에 실패했습니다. 열린옷장에 문의해주세요.";
-        return $self->error( 400, { in => $in, out => $out, return_url => "https://theopencloset.net" } );
+        return $self->_error( 6001, "$email, $authcode" );
     }
 
     #
@@ -317,9 +409,8 @@ sub seoul_2017_2_get {
     );
     if ( my @coupons = $coupon_rs->all ) {
         my $str = join q{, }, map { sprintf "%s(%s)", $_->code, $_->status || q{} } @coupons;
-        my $in  = "coupon via rent_num is already existed: $str";
-        my $out = "취업날개 예약 번호를 두 번 이상 사용하셨습니다. 취업날개로 요청하신 예약 번호는 이미 존재합니다. 취업날개 서비스에 문의해주세요.";
-        return $self->error( 400, { in => $in, out => $out, return_url => $return_url } );
+
+        return $self->_error( 6002, $str );
     }
 
     #
@@ -335,9 +426,7 @@ sub seoul_2017_2_get {
         }
     );
     unless ($coupon) {
-        my $in  = "failed to create coupon: rent_num($rent_num), mbersn($mbersn)";
-        my $out = "쿠폰 생성에 실패했습니다. 열린옷장에 문의해주세요.";
-        return $self->error( 500, { in => $in, out => $out, return_url => "https://theopencloset.net" } );
+        return $self->_error( 6003, "rent_num($rent_num), mbersn($mbersn)" );
     }
     $self->session( coupon_code => $coupon->code );
     $self->app->log->info("coupon: id(" . $user->id . "), name($name), email($email), phone($phone), coupon($code)");
