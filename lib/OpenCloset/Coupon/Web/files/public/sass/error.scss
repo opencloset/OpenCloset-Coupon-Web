@@ -43,5 +43,8 @@ body {
                 font-weight: 800;
             }
         }
+        .force-break {
+            word-wrap: break-word;
+        }
     }
 }

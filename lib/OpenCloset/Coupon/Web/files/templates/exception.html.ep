@@ -32,7 +32,7 @@
                   % }
                   -
                   <%= $dt->iso8601 %>
-                  <%= $encrypted_rent_num %>
+                  <span class="force-break"><%= $encrypted_rent_num %></span>
                 % }
                 % else {
                   We apologize, an error occurred on our side while handling your request.
