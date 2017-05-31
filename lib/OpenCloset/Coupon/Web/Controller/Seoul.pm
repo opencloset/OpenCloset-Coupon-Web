@@ -230,7 +230,7 @@ sub seoul_2017_2_get {
 
     my $data = Mojo::JSON::from_json( Encode::decode_utf8( $res->{content} ) );
     unless ( $data && $data->[0] ) {
-        return $self->_error( 2002, Encode::decode_utf8( $res->{content} ) );
+        return $self->_error( 2002, "$encrypted_rent_num - $rent_num - " . Encode::decode_utf8( $res->{content} ) );
     }
     $data = $data->[0];
 
@@ -412,6 +412,7 @@ sub seoul_2017_2_get {
     unless ( $self->authenticate( $email, $authcode ) ) {
         return $self->_error( 6001, "$email, $authcode" );
     }
+    $self->app->log->info("user: id(" . $user->id . "), name($name), email($email), phone($phone)");
 
     #
     # find coupon then revoke reservation
