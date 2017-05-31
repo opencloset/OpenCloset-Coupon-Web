@@ -190,7 +190,7 @@ sub seoul_2017_2_get {
     #
     # validate rent_num
     #
-    unless ( $encrypted_rent_num && $encrypted_rent_num =~ m/^\d{20}$/ ) {
+    unless ( $encrypted_rent_num && $encrypted_rent_num =~ m/^[[:xdigit:]]{64}$/ ) {
         return $self->_error( 1001, $encrypted_rent_num );
     }
     $self->app->log->debug("encrypted rent_num: $encrypted_rent_num");
