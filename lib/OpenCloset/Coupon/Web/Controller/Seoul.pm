@@ -196,7 +196,7 @@ sub seoul_2017_2_get {
     $self->app->log->debug("encrypted rent_num: $encrypted_rent_num");
     my $hex_key = $self->config->{events}{seoul}{key};
     unless ($hex_key) {
-        return $self->_error( 1002, $rent_num );
+        return $self->_error( 1002, $encrypted_rent_num );
     }
     my $rent_num = $self->_decrypt( $encrypted_rent_num, $hex_key );
     unless ( $rent_num && $rent_num =~ m/^\d{12}-\d{3}$/ ) {
