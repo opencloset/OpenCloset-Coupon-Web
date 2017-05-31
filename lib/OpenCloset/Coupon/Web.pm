@@ -206,7 +206,12 @@ sub default_config {
         url => {
             visit => "http://localhost:8001/visit",
             share => "http://localhost:8010",
-        }
+        },
+        events => {
+            seoul => {
+                key => q{},
+            },
+        },
     };
 }
 
