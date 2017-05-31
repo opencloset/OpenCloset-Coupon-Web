@@ -1,31 +1,37 @@
+use utf8;
+
 package OpenCloset::Coupon::Web::Controller::Seoul;
 # ABSTRACT: OpenCloset::Coupon::Web::Controller::Seoul
 
 use Mojo::Base "Mojolicious::Controller";
 
 use Algorithm::CouponCode;
+use Crypt::Mode::ECB;
 use DateTime;
 use Encode;
 use HTTP::Tiny;
+use Try::Tiny;
 
 our $VERSION = '0.000';
 
-sub _decrypt_inetpia {
-    my ( $self, $encrypted ) = @_;
+sub _decrypt {
+    my ( $self, $hex_ciphertext, $hex_key ) = @_;
 
-    my $decrypted2 = substr( $encrypted, 0,  10 );
-    my $decrypted1 = substr( $encrypted, 10, 20 );
-    $decrypted1 = $decrypted1 / 3;
-    $decrypted2 = $decrypted2 / 7;
-    $decrypted1 = $decrypted1 - 712938454;
-    $decrypted2 = $decrypted2 - 240279371;
+    return q{} unless $hex_key;
+    return q{} unless $hex_ciphertext;
 
-    my $decrypted = $decrypted1 . $decrypted2;
-    $decrypted1 = substr( $decrypted, 1, 12 );
-    $decrypted2 = substr( $decrypted, -3 );
-    $decrypted  = $decrypted1 . "-" . $decrypted2;
+    my $ciphertext = pack( 'H*', $hex_ciphertext );
+    my $key        = pack( 'H*', $hex_key );
+    my $m          = Crypt::Mode::ECB->new('AES');
+    my $plaintext  = try {
+        $m->decrypt( $ciphertext, $key );
+    }
+    catch {
+        warn $_;
+        return '';
+    };
 
-    return $decrypted;
+    return $plaintext;
 }
 
 sub _convert_inetpia_address {
@@ -82,6 +88,11 @@ sub _error {
             out => "암호화된 취업날개 예약 번호 형식이 유효하지 않습니다.",
         },
         1002 => {
+            %common_opencloset,
+            in  => "invalid crypt key: $data",
+            out => "암호화 키가 유효하지 않습니다.",
+        },
+        1003 => {
             %common_seoul,
             in  => "invalid rent_num: $data",
             out => "복호화된 취업날개 예약 번호 형식이 유효하지 않습니다.",
@@ -183,9 +194,13 @@ sub seoul_2017_2_get {
         return $self->_error( 1001, $encrypted_rent_num );
     }
     $self->app->log->debug("encrypted rent_num: $encrypted_rent_num");
-    my $rent_num = $self->_decrypt_inetpia($encrypted_rent_num);
-    unless ( $rent_num && $rent_num =~ m/^\d{12}-\d{3}$/ ) {
+    my $hex_key = $self->config->{events}{seoul}{key};
+    unless ($hex_key) {
         return $self->_error( 1002, $rent_num );
+    }
+    my $rent_num = $self->_decrypt( $encrypted_rent_num, $hex_key );
+    unless ( $rent_num && $rent_num =~ m/^\d{12}-\d{3}$/ ) {
+        return $self->_error( 1003, $rent_num );
     }
     $self->app->log->debug("decrypted rent_num: $rent_num");
 
