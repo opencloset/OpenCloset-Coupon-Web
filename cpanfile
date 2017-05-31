@@ -1,4 +1,5 @@
 requires "Algorithm::CouponCode" => "0";
+requires "Crypt::Mode::ECB" => "0";
 requires "DateTime" => "0";
 requires "Encode" => "0";
 requires "File::ShareDir" => "0";
@@ -10,6 +11,7 @@ requires "Mojolicious::Plugin::AssetPack" => "1.39";
 requires "Mojolicious::Plugin::Authentication" => "0";
 requires "OpenCloset::Schema" => "0.044";
 requires "Path::Tiny" => "0";
+requires "Try::Tiny" => "0";
 requires "experimental" => "0";
 requires "perl" => "5.013002";
 requires "strict" => "0";
