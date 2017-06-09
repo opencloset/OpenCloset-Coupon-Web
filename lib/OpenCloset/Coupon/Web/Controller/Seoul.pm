@@ -496,10 +496,4 @@ __END__
 
 ...
 
-=method login
-
-=method login_get
-
-=method login_post
-
-=method logout_get
+=method seoul_2017_2_get

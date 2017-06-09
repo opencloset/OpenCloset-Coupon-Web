@@ -150,3 +150,11 @@ __END__
 =method login_post
 
 =method logout_get
+
+=method signup_get
+
+=method signup_post
+
+=method forgot_get
+
+=method forgot_post
