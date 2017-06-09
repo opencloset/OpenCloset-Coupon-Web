@@ -315,6 +315,10 @@ sub seoul_2017_2_get {
                     $ui->gender,      $gender,
                 );
 
+                #
+                # GH #1
+                #   5002 오류 발생 시 취업날개 개인 정보 내용으로 갱신함
+                #
                 my $error = $self->_error_code( 5002, $error_str );
                 $self->app->log->warn( $error->{in} );
             }
