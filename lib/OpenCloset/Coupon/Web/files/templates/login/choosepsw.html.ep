@@ -1,0 +1,66 @@
+<!-- -->
+      <!-- CHOOSE PSW BEGINS -->
+      <div class="row choose-psw">
+
+        <div class="content push2 col2 sheet sheet-page">
+
+          <div class="row">
+            <div class="content col4 text-center">
+              <div class="logo-login-img"></div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="content col4 text-center">
+              <span class="sign-up-head">Enter your new password</span>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col4">
+
+              <form
+                id="local-choose-password"
+                action="/login/choosepsw"
+                method="post"
+                data-parsley-validate>
+
+                %= csrf_field
+
+                <div class="row">
+                  <div class="content col4">
+                    <label for="email">New password</label>
+                    <input
+                      type="password"
+                      required
+                      data-parsley-required
+                      data-parsley-required-message="Please enter a password"
+                      data-parsley-minlength="8"
+                      data-parsley-min-message="Please enter at least 8 characters"
+                      placeholder=""
+                      name="password">
+                  </div>
+                </div>
+                <input
+                    type="text"
+                    name="userId"
+                    style="display:none"
+                    value="">
+                <input
+                    type="text"
+                    name="token"
+                    style="display:none"
+                    value="">
+
+                <div class="row">
+                  <div class="content col2">
+                    <button type="submit" class="btn btn-primary">Confirm password</button>
+                  </div>
+                </div>
+              </form>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- CHOOSE PSW ENDS -->

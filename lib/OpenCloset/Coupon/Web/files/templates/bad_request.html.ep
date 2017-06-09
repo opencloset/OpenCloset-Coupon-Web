@@ -1,0 +1,52 @@
+% use utf8;
+% my $_id = "code-400";
+% layout "error", page_id => $_id;
+% title $page->{$_id}{title};
+<!-- 400 BAD REQUEST -->
+        <div class="col s12 m6 offset-m3 l6 offset-l3">
+          <div class="card">
+            <div class="card-image">
+              <div class="logo">
+                <img src="<%= url_for("/img/logo-without-text.png") %>">
+              </div>
+              <div class="error-title">
+                <span class="card-title">400 Bad Request</span>
+              </div>
+            </div>
+            <div class="card-content">
+              <p>
+                "
+                % if ($error) {
+                  <%= $error %>
+                  % if ( $contact eq "seoul" ) {
+                    현재 화면을 갈무리(캡쳐)하신 후
+                    취업날개 서비스에 문의해주세요.
+                  % }
+                  % elsif ( $contact eq "opencloset" ) {
+                    현재 화면을 갈무리(캡쳐)하신 후
+                    열린옷장에 문의해주세요.
+                  % }
+                  % elsif ( $contact eq "both" ) {
+                    현재 화면을 갈무리(캡쳐)하신 후
+                    취업날개 또는 열린옷장에 문의해주세요.
+                  % }
+                  -
+                  <%= $dt->iso8601 %>
+                  <span class="force-break"><%= $encrypted_rent_num %></span>
+                % }
+                % else {
+                  We couldn't understand the request.
+                  The request could not be understood by the server due to malformed syntax.
+                  The client should not repeat the request without modifications.
+                % }
+                "
+              </p>
+              <p>
+                %= include "contacts", contact => $contact;
+              </p>
+            </div>
+            <div class="card-action">
+              <button class="btn btn-primary" onclick="window.location.href='<%= $return_url || url_for("/") %>'"> Save me </button>
+            </div>
+          </div>
+        </div>
