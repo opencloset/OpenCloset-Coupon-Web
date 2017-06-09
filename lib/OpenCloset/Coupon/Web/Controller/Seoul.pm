@@ -60,7 +60,7 @@ sub _convert_inetpia_address {
     return ( $address1, $address2, $address3, $address4 );
 }
 
-sub _error {
+sub _error_code {
     my ( $self, $code, $data ) = @_;
 
     my $return_url = "https://dressfree.net";
@@ -164,13 +164,21 @@ sub _error {
         },
     );
 
+    return $error{$code};
+}
+
+sub _error {
+    my ( $self, $code, $data ) = @_;
+
+    my $error = $self->_error_code( $code, $data );
+
     return $self->error(
-        $error{$code}{status},
+        $error->{status},
         {
-            in         => "error($code): $error{$code}{in}",
-            out        => "오류($code): $error{$code}{out}",
-            contact    => $error{$code}{contact},
-            return_url => $error{$code}{url},
+            in         => "error($code): $error->{in}",
+            out        => "오류($code): $error->{out}",
+            contact    => $error->{contact},
+            return_url => $error->{url},
         }
     );
 }
@@ -306,7 +314,13 @@ sub seoul_2017_2_get {
                     $ui->birth,       $birth,
                     $ui->gender,      $gender,
                 );
-                return $self->_error( 5002, $error_str );
+
+                #
+                # GH #1
+                #   5002 오류 발생 시 취업날개 개인 정보 내용으로 갱신함
+                #
+                my $error = $self->_error_code( 5002, $error_str );
+                $self->app->log->warn( $error->{in} );
             }
 
             my $guard = $self->db->txn_scope_guard;
