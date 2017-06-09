@@ -3,7 +3,7 @@ package OpenCloset::Coupon::Web::Command::setup;
 
 use Mojo::Base "Mojolicious::Command";
 
-our $VERSION = '0.000';
+our $VERSION = '0.001';
 
 use Path::Tiny;
 
