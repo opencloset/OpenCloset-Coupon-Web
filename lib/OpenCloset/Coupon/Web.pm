@@ -1,3 +1,4 @@
+use v5.14.0;
 use utf8;
 
 package OpenCloset::Coupon::Web;

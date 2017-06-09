@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use 5.013002;
+use 5.014000;
 
 use ExtUtils::MakeMaker 6.17;
 
@@ -23,7 +23,7 @@ my %WriteMakefileArgs = (
     "bin/opencloset-coupon-web.pl"
   ],
   "LICENSE" => "perl",
-  "MIN_PERL_VERSION" => "5.013002",
+  "MIN_PERL_VERSION" => "5.014000",
   "NAME" => "OpenCloset::Coupon::Web",
   "PREREQ_PM" => {
     "Algorithm::CouponCode" => 0,

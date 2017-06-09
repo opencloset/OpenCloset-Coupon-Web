@@ -13,7 +13,7 @@ requires "OpenCloset::Schema" => "0.053";
 requires "Path::Tiny" => "0";
 requires "Try::Tiny" => "0";
 requires "experimental" => "0";
-requires "perl" => "5.013002";
+requires "perl" => "v5.14.0";
 requires "strict" => "0";
 requires "utf8" => "0";
 requires "warnings" => "0";
@@ -22,7 +22,7 @@ on 'test' => sub {
   requires "ExtUtils::MakeMaker" => "0";
   requires "File::Spec" => "0";
   requires "Test::More" => "0.88";
-  requires "perl" => "5.013002";
+  requires "perl" => "v5.14.0";
 };
 
 on 'test' => sub {
@@ -32,7 +32,7 @@ on 'test' => sub {
 on 'configure' => sub {
   requires "ExtUtils::MakeMaker" => "6.17";
   requires "File::ShareDir::Install" => "0.06";
-  requires "perl" => "5.013002";
+  requires "perl" => "v5.14.0";
 };
 
 on 'develop' => sub {
@@ -58,5 +58,4 @@ on 'develop' => sub {
   requires "Test::Spelling" => "0.12";
   requires "Test::Version" => "1";
   requires "blib" => "1.01";
-  requires "perl" => "5.006";
 };
