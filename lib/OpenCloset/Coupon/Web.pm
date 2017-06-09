@@ -340,7 +340,8 @@ sub _plugins {
                 ++$authcode_check if $user_obj->authcode && $user_obj->authcode eq $pass;
 
                 unless ( $password_check || $authcode_check ) {
-                    $self->app->log->warn("$user\'s auth failed: password($password_check), authcode($authcode_check)");
+                    $self->app->log->warn(
+                        "$user\'s auth failed: password($password_check), authcode($authcode_check)");
                     return;
                 }
 
