@@ -1,5 +1,7 @@
 Revision history for OpenCloset-Coupon-Web
 
 {{ $NEXT }}
+
+0.001     2017-06-09 13:40:48+09:00 Asia/Seoul
     - 5002 오류 발생 시 취업날개 개인 정보 내용으로 갱신함 (#1)
     - first release (alpha release 1)
