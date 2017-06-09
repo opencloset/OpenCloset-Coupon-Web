@@ -1,0 +1,20 @@
+% if ( $contact eq "seoul" ) {
+  <span class="contact-title">취업날개 서비스 연락처</span><br />
+  전화: 02-2133-5439 / 02-768-8851<br />
+  이메일: <a href="mailto:aman84@seoul.go.kr">aman84@seoul.go.kr</a>
+% }
+% elsif ( $contact eq "opencloset" ) {
+  <span class="contact-title">열린옷장 연락처</span><br />
+  전화: 02-6929-1020<br />
+  이메일: <a href="mailto:info@theopencloset.net">info@theopencloset.net</a>
+% }
+% elsif ( $contact eq "both" ) {
+  <span class="contact-title">취업날개 서비스 연락처</span><br />
+  전화: 02-2133-5439 / 02-768-8851<br />
+  이메일: <a href="mailto:aman84@seoul.go.kr">aman84@seoul.go.kr</a><br />
+  <br />
+  열린옷장 연락처<br />
+  <span class="contact-title">열린옷장 연락처</span><br />
+  전화: 02-6929-1020<br />
+  이메일: <a href="mailto:info@theopencloset.net">info@theopencloset.net</a>
+% }

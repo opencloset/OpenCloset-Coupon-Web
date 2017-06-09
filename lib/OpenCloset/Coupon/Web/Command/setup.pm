@@ -162,6 +162,9 @@ END_CONTENT
 !  error.css
 <  /sass/error.scss
 
+!  coupon.css
+<  /sass/coupon.scss
+
 !  login-common.js
 <  /coffee/login-common.coffee
 

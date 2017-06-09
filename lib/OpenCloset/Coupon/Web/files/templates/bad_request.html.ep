@@ -16,14 +16,37 @@
             <div class="card-content">
               <p>
                 "
-                We couldn't understand the request.
-                The request could not be understood by the server due to malformed syntax.
-                The client should not repeat the request without modifications.
+                % if ($error) {
+                  <%= $error %>
+                  % if ( $contact eq "seoul" ) {
+                    현재 화면을 갈무리(캡쳐)하신 후
+                    취업날개 서비스에 문의해주세요.
+                  % }
+                  % elsif ( $contact eq "opencloset" ) {
+                    현재 화면을 갈무리(캡쳐)하신 후
+                    열린옷장에 문의해주세요.
+                  % }
+                  % elsif ( $contact eq "both" ) {
+                    현재 화면을 갈무리(캡쳐)하신 후
+                    취업날개 또는 열린옷장에 문의해주세요.
+                  % }
+                  -
+                  <%= $dt->iso8601 %>
+                  <span class="force-break"><%= $encrypted_rent_num %></span>
+                % }
+                % else {
+                  We couldn't understand the request.
+                  The request could not be understood by the server due to malformed syntax.
+                  The client should not repeat the request without modifications.
+                % }
                 "
+              </p>
+              <p>
+                %= include "contacts", contact => $contact;
               </p>
             </div>
             <div class="card-action">
-              <button class="btn btn-primary" onclick="window.location.href='<%= url_for("/") %>'"> Save me </button>
+              <button class="btn btn-primary" onclick="window.location.href='<%= $return_url || url_for("/") %>'"> Save me </button>
             </div>
           </div>
         </div>

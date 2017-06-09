@@ -19,11 +19,11 @@ body {
     background-color: #ffcb02;
     background-image: url("/img/error-background.png");
 }
-.error {
+.coupon {
     .logo {
         padding: 40px;
     }
-    .error-title {
+    .coupon-title {
         .card-title {
             bottom: auto;
             color: black;
@@ -36,15 +36,8 @@ body {
             position: static;
         }
     }
-    .card-content {
-        p {
-            margin-bottom: 10px;
-            .contact-title {
-                font-weight: 800;
-            }
-        }
-        .force-break {
-            word-wrap: break-word;
-        }
+    .coupon-code {
+        font-size: 1.4em;
+        font-weight: bold;
     }
 }
