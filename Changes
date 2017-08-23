@@ -1,6 +1,8 @@
 Revision history for OpenCloset-Coupon-Web
 
 {{ $NEXT }}
+
+0.002     2017-08-23 14:25:46+09:00 Asia/Seoul
     - 서울시 담당 주무관 연락처 변경 (#1)
     - 4001, 4002, 4003 오류가 발생 시 취업날개 개인 정보 내용으로 갱신함 (#1)
 

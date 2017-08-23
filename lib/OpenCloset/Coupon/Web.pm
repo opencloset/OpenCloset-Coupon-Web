@@ -7,7 +7,7 @@ package OpenCloset::Coupon::Web;
 
 use Mojo::Base "Mojolicious";
 
-our $VERSION = '0.002';
+our $VERSION = '0.003';
 
 use File::ShareDir "dist_dir";
 use Path::Tiny;
