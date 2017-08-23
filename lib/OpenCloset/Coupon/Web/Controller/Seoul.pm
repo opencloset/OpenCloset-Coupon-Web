@@ -294,9 +294,28 @@ sub seoul_2017_2_get {
     );
     if ($user) {
         my $ui = $user->user_info;
-        return $self->_error( 4001, "$email, $phone" )  unless $ui->phone eq $phone;
-        return $self->_error( 4002, "$email, $gender" ) unless $ui->gender eq $gender;
-        return $self->_error( 4003, "$email, $birth" )  unless $ui->birth eq $birth;
+
+        my $error;
+        $error = $self->_error( 4001, "$email, $phone" )  unless $ui->phone eq $phone;
+        $error = $self->_error( 4002, "$email, $gender" ) unless $ui->gender eq $gender;
+        $error = $self->_error( 4003, "$email, $birth" )  unless $ui->birth eq $birth;
+        $self->app->log->warn( $error->{in} ) if $error;
+
+        #
+        # GH #1
+        #   4002 error 도 5002 와 마찬가지로 발생하지 않도록
+        #
+        my $guard = $self->db->txn_scope_guard;
+        $user->update( { email => $email } );
+        $ui->update(
+            {
+                phone  => $phone,
+                gender => $gender,
+                birth  => $birth,
+            },
+        );
+
+        $guard->commit;
     }
     else {
         my $ui = $self->rs("UserInfo")->find( { phone => $phone } );
