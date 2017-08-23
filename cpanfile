@@ -35,6 +35,10 @@ on 'configure' => sub {
   requires "perl" => "v5.14.0";
 };
 
+on 'configure' => sub {
+  suggests "JSON::PP" => "2.27300";
+};
+
 on 'develop' => sub {
   requires "Dist::Zilla" => "5";
   requires "Dist::Zilla::Plugin::Encoding" => "0";
@@ -57,5 +61,4 @@ on 'develop' => sub {
   requires "Test::Portability::Files" => "0";
   requires "Test::Spelling" => "0.12";
   requires "Test::Version" => "1";
-  requires "blib" => "1.01";
 };
