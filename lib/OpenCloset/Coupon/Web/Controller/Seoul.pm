@@ -295,27 +295,43 @@ sub seoul_2017_2_get {
     if ($user) {
         my $ui = $user->user_info;
 
-        my $error;
-        $error = $self->_error( 4001, "$email, $phone" )  unless $ui->phone eq $phone;
-        $error = $self->_error( 4002, "$email, $gender" ) unless $ui->gender eq $gender;
-        $error = $self->_error( 4003, "$email, $birth" )  unless $ui->birth eq $birth;
-        $self->app->log->warn( $error->{in} ) if $error;
-
         #
         # GH #1
-        #   4002 error 도 5002 와 마찬가지로 발생하지 않도록
+        #   4001, 4002, 4003 오류 발생 시 취업날개 개인 정보 내용으로 갱신함
         #
-        my $guard = $self->db->txn_scope_guard;
-        $user->update( { email => $email } );
-        $ui->update(
-            {
-                phone  => $phone,
-                gender => $gender,
-                birth  => $birth,
-            },
+        my $error;
+        my $error_str = sprintf(
+            "unmatched user information: name(%s) phone(%s) email(%s,%s) birth(%d,%d) gender(%s,%s)",
+            $name,
+            $phone,
+            $ui->user->email, $email,
+            $ui->birth,       $birth,
+            $ui->gender,      $gender,
         );
+        unless ( $ui->phone eq $phone ) {
+            $error = $self->_error_code( 4001, $error_str );
+            $self->app->log->warn( $error->{in} );
+        }
+        unless ( $ui->gender eq $gender ) {
+            $error = $self->_error_code( 4002, $error_str );
+            $self->app->log->warn( $error->{in} );
+        }
+        unless ( $ui->birth eq $birth ) {
+            $error = $self->_error_code( 4003, $error_str );
+            $self->app->log->warn( $error->{in} );
+        }
 
-        $guard->commit;
+        if ($error) {
+            my $guard = $self->db->txn_scope_guard;
+            $ui->update(
+                {
+                    phone  => $phone,
+                    gender => $gender,
+                    birth  => $birth,
+                },
+            );
+            $guard->commit;
+        }
     }
     else {
         my $ui = $self->rs("UserInfo")->find( { phone => $phone } );
