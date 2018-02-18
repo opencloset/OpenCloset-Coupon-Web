@@ -183,8 +183,8 @@ sub _error {
     );
 }
 
-sub seoul_2017_2_get {
-    my $self = shift;
+sub _seoul_coupon_get {
+    my ( $self, $coupon_id ) = @_;
 
     my $redirect = $self->param("redirect") || q{};
     my $encrypted_rent_num = $self->param("rent_num") || q{};
@@ -469,7 +469,7 @@ sub seoul_2017_2_get {
     my $coupon_rs = $self->rs("Coupon")->search(
         {
             type   => "suit",
-            desc   => { like => "seoul-2017-2|$rent_num|%" },
+            desc   => { like => "$coupon_id|$rent_num|%" },
         }
     );
     if ( my @coupons = $coupon_rs->all ) {
@@ -486,7 +486,7 @@ sub seoul_2017_2_get {
         {
             code   => $code,
             type   => "suit",
-            desc   => "seoul-2017-2|$rent_num|$mbersn",
+            desc   => "$coupon_id|$rent_num|$mbersn",
             status => "provided",
         }
     );
@@ -498,14 +498,14 @@ sub seoul_2017_2_get {
 
     if ( $rent_type eq "offline" ) {
         my $url = $self->url_for($visit_url);
-        $self->redirect_to(
-            $url->query(
-                name  => $name,
-                phone => $phone,
-                sms   => $authcode,
-                type  => "visit-info",
-            )
+        $url->query(
+            name  => $name,
+            phone => $phone,
+            sms   => $authcode,
+            type  => "visit-info",
         );
+        $self->app->log->info( "redirect_to: " . $url->to_string );
+        $self->redirect_to($url);
     }
     elsif ( $rent_type eq "online" ) {
         $self->stash(
@@ -516,6 +516,9 @@ sub seoul_2017_2_get {
         $self->render( template => "seoul" );
     }
 }
+
+sub seoul_2017_2_get { $_[0]->_seoul_coupon_get("seoul-2017-2"); }
+sub seoul_2018_1_get { $_[0]->_seoul_coupon_get("seoul-2018-1"); }
 
 1;
 
@@ -532,3 +535,5 @@ __END__
 ...
 
 =method seoul_2017_2_get
+
+=method seoul_2018_1_get
