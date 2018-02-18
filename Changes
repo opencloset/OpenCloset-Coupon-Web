@@ -1,6 +1,7 @@
-Revision history for OpenCloset-Coupon-Web
+Revision history for {{ $dist->name }}
 
 {{ $NEXT }}
+    - seoul-2018-1 쿠폰 지원 (#6)
 
 0.002     2017-08-23 14:25:46+09:00 Asia/Seoul
     - 서울시 담당 주무관 연락처 변경 (#1)
