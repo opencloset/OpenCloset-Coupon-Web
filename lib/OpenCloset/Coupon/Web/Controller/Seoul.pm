@@ -482,12 +482,14 @@ sub _seoul_coupon_get {
     # find or create coupon then save it into session
     #
     my $code = Algorithm::CouponCode::cc_generate( parts => 3 );
+    my $event = $self->rs("Event")->search({ name => $coupon_id })->next;
     my $coupon = $self->rs("Coupon")->create(
         {
-            code   => $code,
-            type   => "suit",
-            desc   => "$coupon_id|$rent_num|$mbersn",
-            status => "provided",
+            event_id => $event ? $event->id : undef,
+            code     => $code,
+            type     => "suit",
+            desc     => "$coupon_id|$rent_num|$mbersn",
+            status   => "provided",
         }
     );
     unless ($coupon) {
