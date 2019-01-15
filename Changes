@@ -2,6 +2,7 @@ Revision history for {{ $dist->name }}
 
 {{ $NEXT }}
     - seoul-2019-1 쿠폰 지원 (#10)
+    - 불필요한 subroutiune 제거
 
 0.004     2018-12-18 20:53:43+09:00 Asia/Seoul
     - 쿠폰을 발급할때에 event 를 연결 (#8)

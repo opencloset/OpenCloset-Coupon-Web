@@ -519,8 +519,6 @@ sub _seoul_coupon_get {
     }
 }
 
-sub seoul_2017_2_get { $_[0]->_seoul_coupon_get("seoul-2017-2"); }
-sub seoul_2018_1_get { $_[0]->_seoul_coupon_get("seoul-2018-1"); }
 sub seoul_2019_1_get { $_[0]->_seoul_coupon_get("seoul-2019-1"); }
 
 1;
@@ -537,6 +535,4 @@ __END__
 
 ...
 
-=method seoul_2017_2_get
-
-=method seoul_2018_1_get
+=method seoul_2019_1_get
