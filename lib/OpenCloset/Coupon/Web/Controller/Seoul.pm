@@ -12,7 +12,7 @@ use Encode;
 use HTTP::Tiny;
 use Try::Tiny;
 
-our $VERSION = '0.005';
+our $VERSION = '0.006';
 
 sub _decrypt {
     my ( $self, $hex_ciphertext, $hex_key ) = @_;

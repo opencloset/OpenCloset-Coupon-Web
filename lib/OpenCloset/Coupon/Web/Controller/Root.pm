@@ -3,7 +3,7 @@ package OpenCloset::Coupon::Web::Controller::Root;
 
 use Mojo::Base "Mojolicious::Controller";
 
-our $VERSION = '0.005';
+our $VERSION = '0.006';
 
 sub index_get {
     my $self = shift;
