@@ -1,6 +1,8 @@
 Revision history for {{ $dist->name }}
 
 {{ $NEXT }}
+
+0.005     2019-01-15 12:54:32+09:00 Asia/Seoul
     - seoul-2019-1 쿠폰 지원 (#10)
     - 불필요한 subroutiune 제거
 
