@@ -496,7 +496,7 @@ sub _public_routes {
     #$r->get("/login/forgot")->to("login#forgot_get");
     #$r->post("/login/forgot")->to("login#forgot_post");
 
-    $r->get("/seoul/2019/1")->to("seoul#seoul_2019_1_get");
+    $r->get("/seoul/2020/1")->to("seoul#seoul_2020_1_get");
 }
 
 sub _private_routes {
