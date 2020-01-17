@@ -28,7 +28,7 @@ END_CONTENT
         my $conf = $app->config_file . ".sample";
         $app->log->debug("generate sample configuration file: $conf");
         my $content = $app->dumper( $app->default_config );
-        $content =~ s/\\x{([^}]+)}/chr(hex("0x$1"))/eg;
+        $content =~ s/\\x\{([^}]+)\}/chr(hex("0x$1"))/eg;
         $content =~ s/(\n\s*[\)}\]])/,$1/gms;
         my $vim_conf = "# vim: ts=8 sts=4 sw=4 ft=perl et:";
         path($conf)->spew_utf8( $content, $vim_conf );
