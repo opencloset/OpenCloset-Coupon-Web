@@ -1,6 +1,8 @@
 Revision history for {{ $dist->name }}
 
 {{ $NEXT }}
+
+0.007     2020-01-18 00:38:29+09:00 Asia/Seoul
     - 잘못 전달되는 연도 데이터를 올해 연도 데이터로 가정해서 처리 (https://github.com/opencloset/opencloset/issues/1646)
 
 0.006     2020-01-17 23:54:21+09:00 Asia/Seoul
