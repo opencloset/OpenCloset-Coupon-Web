@@ -1,6 +1,7 @@
 Revision history for {{ $dist->name }}
 
 {{ $NEXT }}
+    - 잘못 전달되는 연도 데이터를 올해 연도 데이터로 가정해서 처리 (https://github.com/opencloset/opencloset/issues/1646)
 
 0.006     2020-01-17 23:54:21+09:00 Asia/Seoul
     - seoul-2020-1 쿠폰 지원 (https://github.com/opencloset/opencloset/issues/1646)

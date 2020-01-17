@@ -496,6 +496,13 @@ sub _public_routes {
     #$r->get("/login/forgot")->to("login#forgot_get");
     #$r->post("/login/forgot")->to("login#forgot_post");
 
+    ### FIXME
+    ### https://github.com/opencloset/opencloset/issues/1646
+    ### https://lh3.googleusercontent.com/-cWSkd3LpTrM/XiHQY1CM4OI/AAAAAAAAJuk/8Xo5ilaSu0AXPU28uAdNAIfvhNQcl-dGACK8BGAsYHg/s0/2020-01-17.jpg
+    ### 아이넷피아에서 넘어오는 URL 이 2020 년도임에도 2019 로 넘어옴
+    ### 이를 2019 쿠폰 요청이 넘어올 일은 없다고 가정하고, 임시로 2019 로 와도 2020 으로 처리
+    ### 2020 으로 바꿔달라고 요청할 것이고 변경된 이후에는 2019 로 들어오는 요청은 유효하지 않도록 처리할 예정
+    $r->get("/seoul/2019/1")->to("seoul#seoul_2020_1_get");
     $r->get("/seoul/2020/1")->to("seoul#seoul_2020_1_get");
 }
 
