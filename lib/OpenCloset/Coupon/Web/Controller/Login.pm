@@ -3,7 +3,7 @@ package OpenCloset::Coupon::Web::Controller::Login;
 
 use Mojo::Base "Mojolicious::Controller";
 
-our $VERSION = '0.006';
+our $VERSION = '0.007';
 
 sub login {
     my $self = shift;
