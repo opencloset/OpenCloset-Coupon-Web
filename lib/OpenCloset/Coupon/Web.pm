@@ -104,7 +104,7 @@ sub default_config {
         },
         site      => { name => "OpenCloset::Coupon::Web", },
         time_zone => "Asia/Seoul",
-        copyright => "2015-2017 THE OPEN CLOSET",
+        copyright => "2015-2021 THE OPEN CLOSET",
         secrets   => [],
         extra_static_paths   => [ "assets", "static" ],
         extra_renderer_paths => ["templates"],
