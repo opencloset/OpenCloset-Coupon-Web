@@ -513,7 +513,7 @@ sub _public_routes {
     # - https://github.com/opencloset/opencloset/issues/1646
     # - https://lh3.googleusercontent.com/-cWSkd3LpTrM/XiHQY1CM4OI/AAAAAAAAJuk/8Xo5ilaSu0AXPU28uAdNAIfvhNQcl-dGACK8BGAsYHg/s0/2020-01-17.jpg
     #
-    $r->get("/seoul/2021/1")->to("seoul#seoul_2021_1_get");
+    $r->get("/seoul/2022/1")->to("seoul#seoul_2022_1_get");
 }
 
 sub _private_routes {
