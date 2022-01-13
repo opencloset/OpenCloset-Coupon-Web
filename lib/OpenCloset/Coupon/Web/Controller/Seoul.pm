@@ -519,7 +519,7 @@ sub _seoul_coupon_get {
     }
 }
 
-sub seoul_2021_1_get { $_[0]->_seoul_coupon_get("seoul-2021-1"); }
+sub seoul_2022_1_get { $_[0]->_seoul_coupon_get("seoul-2022-1"); }
 
 1;
 
