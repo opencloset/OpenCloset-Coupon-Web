@@ -1,6 +1,7 @@
 Revision history for {{ $dist->name }}
 
 {{ $NEXT }}
+    - seoul-2023-1 쿠폰 지원 (#18)
 
 0.009     2022-01-13 21:03:27+09:00 Asia/Seoul
     - seoul-2022-1 쿠폰 지원 (#16)
