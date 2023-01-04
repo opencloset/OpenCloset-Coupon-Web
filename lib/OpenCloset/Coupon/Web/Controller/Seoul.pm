@@ -520,6 +520,7 @@ sub _seoul_coupon_get {
 }
 
 sub seoul_2022_1_get { $_[0]->_seoul_coupon_get("seoul-2022-1"); }
+sub seoul_2023_1_get { $_[0]->_seoul_coupon_get("seoul-2023-1"); }
 
 1;
 
@@ -536,3 +537,5 @@ __END__
 ...
 
 =method seoul_2022_1_get
+
+=method seoul_2023_1_get
